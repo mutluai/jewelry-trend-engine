@@ -7,9 +7,11 @@ from config import get_settings
 
 settings = get_settings()
 
+_DB_URL = settings.database_url or "sqlite+aiosqlite:///./local_demo.db"
+
 # SQLAlchemy async engine
 engine = create_async_engine(
-    settings.database_url,
+    _DB_URL,
     echo=not settings.is_production,
     poolclass=NullPool,  # Railway/Supabase: use NullPool for serverless compatibility
 )
