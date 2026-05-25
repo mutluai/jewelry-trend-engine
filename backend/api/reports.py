@@ -21,7 +21,12 @@ async def list_reports(db: AsyncSession = Depends(get_db)):
 @router.get("/reports/{report_id}", response_model=ReportRead)
 async def get_report(report_id: str, db: AsyncSession = Depends(get_db)):
     from fastapi import HTTPException
-    result = await db.execute(select(Report).where(Report.id == report_id))
+    import uuid as _uuid
+    try:
+        uid = _uuid.UUID(report_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid report ID")
+    result = await db.execute(select(Report).where(Report.id == uid))
     report = result.scalar_one_or_none()
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")

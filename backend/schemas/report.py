@@ -8,6 +8,7 @@ class ReportRead(BaseModel):
     report_type: str
     title: str
     language: str
+    content_markdown: str | None = None
     storage_url: str | None
     period_start: str | None
     period_end: str | None
