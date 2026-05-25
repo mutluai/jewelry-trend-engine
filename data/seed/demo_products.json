@@ -1,0 +1,83 @@
+{
+  "brand": {
+    "name": "Demo Mücevher Markası",
+    "slug": "demo-brand",
+    "market": "Turkey,Europe",
+    "style_focus": "minimalist,gold-plated,silver,gemstone",
+    "target_customer": "women 20-40, gift buyers, bridal",
+    "price_min": 25,
+    "price_max": 250,
+    "categories": "rings,necklaces,bracelets,earrings,anklets",
+    "report_language": "tr"
+  },
+  "sources": [
+    {"name": "mock_demo", "display_name": "Mock / Demo", "connector_class": "connectors.mock_demo.MockDemoConnector", "legal_status": "mock"},
+    {"name": "google_trends", "display_name": "Google Trends", "connector_class": "connectors.google_trends.GoogleTrendsConnector", "legal_status": "public_allowed"},
+    {"name": "etsy", "display_name": "Etsy Open API v3", "connector_class": "connectors.etsy.EtsyConnector", "legal_status": "official_api"},
+    {"name": "pinterest", "display_name": "Pinterest API v5", "connector_class": "connectors.pinterest.PinterestConnector", "legal_status": "stub"},
+    {"name": "manual_upload", "display_name": "Manual Upload (CSV/JSON)", "connector_class": "connectors.manual_upload.ManualUploadConnector", "legal_status": "public_allowed"},
+    {"name": "web_compliant", "display_name": "Compliant Web Scraper", "connector_class": "connectors.web_compliant.WebCompliantConnector", "legal_status": "public_allowed"}
+  ],
+  "connector_configs": [
+    {"name": "mock_demo", "display_name": "Mock / Demo", "is_enabled": true, "legal_status": "mock", "rate_limit_seconds": 0},
+    {"name": "google_trends", "display_name": "Google Trends", "is_enabled": true, "legal_status": "public_allowed", "rate_limit_seconds": 60},
+    {"name": "etsy", "display_name": "Etsy Open API v3", "is_enabled": true, "legal_status": "official_api", "rate_limit_seconds": 1},
+    {"name": "pinterest", "display_name": "Pinterest API v5 (STUB)", "is_enabled": true, "legal_status": "stub", "rate_limit_seconds": 1},
+    {"name": "manual_upload", "display_name": "Manual Upload", "is_enabled": true, "legal_status": "public_allowed", "rate_limit_seconds": 0},
+    {"name": "web_compliant", "display_name": "Compliant Web Scraper", "is_enabled": false, "legal_status": "public_allowed", "rate_limit_seconds": 3}
+  ],
+  "app_settings": [
+    {"key": "weight_trend_velocity", "value": "0.25", "value_type": "float", "description": "Trend hızı ağırlığı", "category": "scoring"},
+    {"key": "weight_cross_source", "value": "0.20", "value_type": "float", "description": "Çoklu kaynak ağırlığı", "category": "scoring"},
+    {"key": "weight_competition_density", "value": "0.15", "value_type": "float", "description": "Rekabet yoğunluğu ağırlığı", "category": "scoring"},
+    {"key": "weight_novelty", "value": "0.15", "value_type": "float", "description": "Yenilik ağırlığı", "category": "scoring"},
+    {"key": "weight_brand_fit", "value": "0.15", "value_type": "float", "description": "Marka uyumu ağırlığı", "category": "scoring"},
+    {"key": "weight_review_signal", "value": "0.10", "value_type": "float", "description": "Değerlendirme sinyali ağırlığı", "category": "scoring"},
+    {"key": "brand_name", "value": "Demo Mücevher Markası", "value_type": "string", "description": "Marka adı", "category": "brand"},
+    {"key": "brand_market", "value": "Turkey,Europe", "value_type": "string", "description": "Hedef pazarlar", "category": "brand"},
+    {"key": "brand_style_focus", "value": "minimalist,gold-plated,silver,gemstone", "value_type": "string", "description": "Stil odağı", "category": "brand"},
+    {"key": "brand_price_min", "value": "25", "value_type": "float", "description": "Minimum fiyat (USD)", "category": "brand"},
+    {"key": "brand_price_max", "value": "250", "value_type": "float", "description": "Maximum fiyat (USD)", "category": "brand"},
+    {"key": "report_language", "value": "tr", "value_type": "string", "description": "Rapor dili (tr/en)", "category": "reporting"},
+    {"key": "daily_report_enabled", "value": "true", "value_type": "bool", "description": "Günlük rapor aktif mi?", "category": "reporting"},
+    {"key": "weekly_report_enabled", "value": "true", "value_type": "bool", "description": "Haftalık rapor aktif mi?", "category": "reporting"},
+    {"key": "alert_score_threshold", "value": "75", "value_type": "float", "description": "Uyarı için minimum fırsat skoru", "category": "alerts"}
+  ],
+  "categories": [
+    {"name": "rings", "name_tr": "Yüzükler", "slug": "rings"},
+    {"name": "necklaces", "name_tr": "Kolyeler", "slug": "necklaces"},
+    {"name": "bracelets", "name_tr": "Bilezikler", "slug": "bracelets"},
+    {"name": "earrings", "name_tr": "Küpeler", "slug": "earrings"},
+    {"name": "anklets", "name_tr": "Halhallar", "slug": "anklets"}
+  ],
+  "materials": [
+    {"name": "gold-plated", "name_tr": "Altın Kaplama", "slug": "gold-plated"},
+    {"name": "sterling silver", "name_tr": "Gümüş", "slug": "sterling-silver"},
+    {"name": "rose gold", "name_tr": "Pembe Altın", "slug": "rose-gold"},
+    {"name": "gold filled", "name_tr": "Altın Dolgulu", "slug": "gold-filled"},
+    {"name": "brass", "name_tr": "Pirinç", "slug": "brass"},
+    {"name": "stainless steel", "name_tr": "Paslanmaz Çelik", "slug": "stainless-steel"}
+  ],
+  "stones": [
+    {"name": "diamond", "name_tr": "Elmas", "slug": "diamond"},
+    {"name": "emerald", "name_tr": "Zümrüt", "slug": "emerald"},
+    {"name": "sapphire", "name_tr": "Safir", "slug": "sapphire"},
+    {"name": "ruby", "name_tr": "Yakut", "slug": "ruby"},
+    {"name": "pearl", "name_tr": "İnci", "slug": "pearl"},
+    {"name": "turquoise", "name_tr": "Turkuaz", "slug": "turquoise"},
+    {"name": "opal", "name_tr": "Opal", "slug": "opal"},
+    {"name": "amethyst", "name_tr": "Ametist", "slug": "amethyst"},
+    {"name": "moonstone", "name_tr": "Ay Taşı", "slug": "moonstone"},
+    {"name": "cubic zirconia", "name_tr": "Zirkon", "slug": "cubic-zirconia"}
+  ],
+  "trend_signals": [
+    {"signal_type": "keyword_trend", "keyword": "minimalist gold ring", "trend_direction": "rising", "velocity_score": 45, "interest_value": 78, "geo": "TR", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "pearl earrings", "trend_direction": "rising", "velocity_score": 38, "interest_value": 65, "geo": "TR", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "evil eye jewelry", "trend_direction": "rising", "velocity_score": 52, "interest_value": 89, "geo": "TR", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "silver necklace", "trend_direction": "stable", "velocity_score": 5, "interest_value": 72, "geo": "DE", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "vintage jewelry", "trend_direction": "rising", "velocity_score": 28, "interest_value": 54, "geo": "GB", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "tennis bracelet", "trend_direction": "rising", "velocity_score": 61, "interest_value": 82, "geo": "TR", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "layered necklace", "trend_direction": "rising", "velocity_score": 33, "interest_value": 60, "geo": "TR", "source_name": "google_trends", "is_mock": true},
+    {"signal_type": "keyword_trend", "keyword": "birthstone ring", "trend_direction": "stable", "velocity_score": 8, "interest_value": 45, "geo": "DE", "source_name": "google_trends", "is_mock": true}
+  ]
+}
