@@ -1,6 +1,6 @@
 """
 AI Task Functions — All AI operations in the Jewelry Trend Engine.
-Uses Anthropic Claude API exclusively.
+Uses Google Gemini API.
 Every call logs: model, tokens, latency, timestamp.
 """
 import asyncio
@@ -72,29 +72,29 @@ async def analyze_image(image_url: str) -> tuple[VisualAnalysis, dict]:
         prompt_template = "Analyze this jewelry product image. Return JSON with: visual_tags, style_description, material_guess, design_complexity, similar_styles."
 
     try:
-        import anthropic
-        client_module = __import__("ai.client", fromlist=["get_anthropic_client"])
-        client = client_module.get_anthropic_client()
-
         import time
+        import httpx
+        import google.generativeai as genai
+        from ai.client import _get_gemini_model
+
+        async with httpx.AsyncClient(timeout=15) as http:
+            img_resp = await http.get(image_url)
+            img_bytes = img_resp.content
+            mime = img_resp.headers.get("content-type", "image/jpeg").split(";")[0]
+
+        gemini_model = _get_gemini_model(settings.ai_model, "You are a jewelry product image analyst.", True)
         start = time.monotonic()
-        response = await client.messages.create(
-            model=settings.ai_model,
-            max_tokens=1024,
-            messages=[{
-                "role": "user",
-                "content": [
-                    {"type": "image", "source": {"type": "url", "url": image_url}},
-                    {"type": "text", "text": prompt_template},
-                ],
-            }],
-        )
+        response = await gemini_model.generate_content_async([
+            {"mime_type": mime, "data": img_bytes},
+            prompt_template,
+        ])
         latency_ms = int((time.monotonic() - start) * 1000)
-        content = response.content[0].text
+        content = response.text or ""
+        meta = response.usage_metadata
         usage = {
             "model": settings.ai_model,
-            "input_tokens": response.usage.input_tokens,
-            "output_tokens": response.usage.output_tokens,
+            "input_tokens": meta.prompt_token_count if meta else 0,
+            "output_tokens": meta.candidates_token_count if meta else 0,
             "latency_ms": latency_ms,
         }
 

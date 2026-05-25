@@ -21,8 +21,8 @@ class Settings(BaseSettings):
     upstash_redis_rest_token: str = ""
 
     # AI
-    anthropic_api_key: str = ""
-    ai_model: str = "claude-3-5-sonnet-20241022"
+    gemini_api_key: str = ""
+    ai_model: str = "gemini-1.5-flash"
     ai_max_tokens: int = 4096
 
     # Notifications
@@ -63,7 +63,7 @@ class Settings(BaseSettings):
 
     @property
     def has_ai(self) -> bool:
-        return bool(self.anthropic_api_key)
+        return bool(self.gemini_api_key)
 
     @property
     def has_etsy(self) -> bool:
