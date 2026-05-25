@@ -22,7 +22,7 @@ class Settings(BaseSettings):
 
     # AI
     gemini_api_key: str = ""
-    ai_model: str = "gemini-2.5-pro"
+    ai_model: str = "gemini-3.1-flash-lite"
     ai_max_tokens: int = 4096
 
     # Notifications
