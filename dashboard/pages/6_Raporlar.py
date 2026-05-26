@@ -1,8 +1,7 @@
 """Raporlar — Generated reports list, preview, and trigger."""
 import streamlit as st
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from app import api_get, api_post
+
+from api_client import api_get, api_post
 
 st.set_page_config(page_title="Raporlar | Jewelry Trend Engine", page_icon="📋", layout="wide")
 st.title("📋 Raporlar")

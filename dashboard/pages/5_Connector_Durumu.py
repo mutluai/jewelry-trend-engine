@@ -1,8 +1,7 @@
 """Connector Durumu — Connector status, controls, and run history."""
 import streamlit as st
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from app import api_get, api_post
+
+from api_client import api_get, api_post
 import httpx
 
 st.set_page_config(page_title="Connector Durumu | Jewelry Trend Engine", page_icon="⚙️", layout="wide")

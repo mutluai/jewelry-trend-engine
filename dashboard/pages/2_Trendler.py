@@ -1,9 +1,8 @@
 """Trendler — Trend signals timeline and analysis."""
 import streamlit as st
 import pandas as pd
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from app import api_get
+
+from api_client import api_get
 
 st.set_page_config(page_title="Trendler | Jewelry Trend Engine", page_icon="📈", layout="wide")
 st.title("📈 Trendler")
