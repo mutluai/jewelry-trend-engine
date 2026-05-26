@@ -14,12 +14,10 @@ from .base import BaseConnector, RawData, ProductData
 logger = logging.getLogger(__name__)
 
 ETSY_API_BASE = "https://openapi.etsy.com/v3"
-JEWELRY_TAXONOMY_IDS = [
-    68887144,  # Jewelry > Rings
-    68887145,  # Jewelry > Necklaces
-    68887146,  # Jewelry > Bracelets
-    68887147,  # Jewelry > Earrings
-    68887148,  # Jewelry > Body Jewelry
+JEWELRY_KEYWORDS = [
+    "gold ring", "silver necklace", "pearl earrings",
+    "diamond bracelet", "minimalist jewelry", "boho jewelry",
+    "stackable rings", "hoop earrings",
 ]
 
 
@@ -46,13 +44,13 @@ class EtsyConnector(BaseConnector):
         items = []
 
         async with httpx.AsyncClient(timeout=30.0) as client:
-            for taxonomy_id in JEWELRY_TAXONOMY_IDS[:3]:
+            for keyword in JEWELRY_KEYWORDS[:5]:
                 try:
                     response = await client.get(
                         f"{ETSY_API_BASE}/application/listings/active",
                         params={
-                            "taxonomy_id": taxonomy_id,
-                            "limit": 50,
+                            "keywords": keyword,
+                            "limit": 25,
                             "sort_on": "score",
                             "sort_order": "desc",
                         },
@@ -60,14 +58,16 @@ class EtsyConnector(BaseConnector):
                     )
                     response.raise_for_status()
                     data = response.json()
+                    results = data.get("results", [])
+                    logger.info(f"Etsy '{keyword}': {len(results)} listings")
 
-                    for listing in data.get("results", []):
+                    for listing in results:
                         items.append(self._parse_listing(listing))
 
                     await asyncio.sleep(self.rate_limit_seconds)
 
                 except Exception as e:
-                    logger.warning(f"Etsy fetch failed for taxonomy {taxonomy_id}: {e}")
+                    logger.warning(f"Etsy fetch failed for '{keyword}': {e}")
 
         return items
 
