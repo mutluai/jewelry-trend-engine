@@ -56,7 +56,9 @@ class EtsyConnector(BaseConnector):
                         },
                         headers={"x-api-key": self.api_key},
                     )
-                    response.raise_for_status()
+                    if response.status_code != 200:
+                        logger.error(f"Etsy '{keyword}': HTTP {response.status_code} — {response.text[:300]}")
+                        response.raise_for_status()
                     data = response.json()
                     results = data.get("results", [])
                     logger.info(f"Etsy '{keyword}': {len(results)} listings")
@@ -67,7 +69,7 @@ class EtsyConnector(BaseConnector):
                     await asyncio.sleep(self.rate_limit_seconds)
 
                 except Exception as e:
-                    logger.warning(f"Etsy fetch failed for '{keyword}': {e}")
+                    logger.error(f"Etsy fetch failed for '{keyword}': {type(e).__name__}: {e}")
 
         return items
 
