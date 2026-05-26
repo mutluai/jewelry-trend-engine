@@ -203,11 +203,13 @@ class GoogleTrendsConnector(BaseConnector):
             for raw in raw_items:
                 payload = raw.raw_payload
                 # Upsert by external_id to avoid duplicates
+                # Skip if a real (non-mock) record already exists for this keyword+geo
                 existing = await db.execute(
                     select(TrendSignal).where(
                         TrendSignal.keyword == payload.get("keyword"),
                         TrendSignal.geo == payload.get("geo"),
                         TrendSignal.source_name == self.name,
+                        TrendSignal.is_mock == False,  # noqa: E712
                     ).limit(1)
                 )
                 if existing.scalar_one_or_none():
