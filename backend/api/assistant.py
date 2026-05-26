@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ai.client import call_gemini
@@ -106,33 +106,32 @@ def _safe_parse_json(raw: str) -> dict:
 async def haftalik_ozet(db: AsyncSession = Depends(get_db)) -> Any:
     """Generate an AI weekly brief from real trend & product data."""
 
-    # 1. Fetch top trend signals (real data only)
+    # 1. Fetch top trend signals (exclude explicitly mocked data)
     trend_q = (
         select(TrendSignal)
-        .where(TrendSignal.is_mock == False)  # noqa: E712
+        .where(or_(TrendSignal.is_mock == False, TrendSignal.is_mock.is_(None)))  # noqa: E712
         .order_by(TrendSignal.velocity_score.desc().nulls_last())
         .limit(15)
     )
     trend_result = await db.execute(trend_q)
     signals: list[TrendSignal] = list(trend_result.scalars().all())
 
-    # 2. Fetch top products by opportunity score (real data only)
+    # 2. Fetch top products by opportunity score (mock products included as fallback)
     product_q = (
         select(Product, OpportunityScore)
         .join(OpportunityScore, OpportunityScore.product_id == Product.id)
-        .where(Product.is_mock == False)  # noqa: E712
         .order_by(OpportunityScore.total_score.desc())
         .limit(10)
     )
     product_result = await db.execute(product_q)
     product_rows = product_result.all()
 
-    # 3. Guard: no real data yet
-    if not signals and not product_rows:
+    # 3. Guard: need at least trend signals to generate a meaningful brief
+    if not signals:
         return {
             "error": (
-                "Henüz yeterli trend verisi yok. "
-                "Google Trends connector'ı çalıştırın."
+                "Henüz trend verisi yok. "
+                "Connector Durumu sayfasından Google Trends connector'ı çalıştırın."
             )
         }
 
