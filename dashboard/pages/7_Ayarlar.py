@@ -1,14 +1,12 @@
 """Ayarlar — Brand profile, scoring weights, and system settings."""
 import streamlit as st
 
-from api_client import api_get, api_post
+from api_client import api_get, api_post, API_BASE
 import httpx
 
 st.set_page_config(page_title="Ayarlar | Jewelry Trend Engine", page_icon="⚙️", layout="wide")
 st.title("⚙️ Ayarlar")
 st.markdown("Marka profili, puanlama ağırlıkları ve sistem yapılandırması.")
-
-API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8000")
 
 tab1, tab2, tab3 = st.tabs(["🏷️ Marka Profili", "⚖️ Puanlama Ağırlıkları", "🔧 Sistem"])
 

@@ -1,14 +1,12 @@
 """Connector Durumu — Connector status, controls, and run history."""
 import streamlit as st
 
-from api_client import api_get, api_post
+from api_client import api_get, api_post, API_BASE
 import httpx
 
 st.set_page_config(page_title="Connector Durumu | Jewelry Trend Engine", page_icon="⚙️", layout="wide")
 st.title("⚙️ Connector Durumu")
 st.markdown("Veri kaynağı connector'larını izleyin ve yönetin.")
-
-API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8000")
 
 connectors = api_get("/api/v1/connectors")
 
