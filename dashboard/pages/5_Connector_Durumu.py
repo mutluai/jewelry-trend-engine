@@ -51,6 +51,8 @@ if connectors:
                             dur = result.get("duration_seconds", 0)
                             if status == "success":
                                 st.success(f"✅ {fetched} çekildi, {saved} kaydedildi ({dur:.1f}s)")
+                            elif status == "running":
+                                st.info("⏳ Arka planda çalışıyor... Birkaç dakika sonra sayfayı yenile.")
                             else:
                                 st.error(f"❌ Hata: {result.get('error', 'Bilinmeyen hata')}")
 
