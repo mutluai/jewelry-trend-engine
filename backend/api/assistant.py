@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ai.client import call_gemini
@@ -100,6 +100,25 @@ def _safe_parse_json(raw: str) -> dict:
 # ---------------------------------------------------------------------------
 # GET /assistant/ozet
 # ---------------------------------------------------------------------------
+
+
+@router.get("/assistant/debug")
+async def debug_counts(db: AsyncSession = Depends(get_db)) -> Any:
+    """Debug: count records in key tables."""
+    total_signals = (await db.execute(select(func.count()).select_from(TrendSignal))).scalar()
+    real_signals = (await db.execute(
+        select(func.count()).select_from(TrendSignal)
+        .where(or_(TrendSignal.is_mock == False, TrendSignal.is_mock.is_(None)))  # noqa: E712
+    )).scalar()
+    sample = (await db.execute(
+        select(TrendSignal.keyword, TrendSignal.geo, TrendSignal.source_name, TrendSignal.is_mock)
+        .limit(5)
+    )).all()
+    return {
+        "total_trend_signals": total_signals,
+        "real_trend_signals": real_signals,
+        "sample": [{"keyword": r[0], "geo": r[1], "source": r[2], "is_mock": r[3]} for r in sample],
+    }
 
 
 @router.get("/assistant/ozet")
