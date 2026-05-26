@@ -33,6 +33,8 @@ class Settings(BaseSettings):
 
     # Connectors
     etsy_api_key: str = ""
+    etsy_access_token: str = ""
+    etsy_refresh_token: str = ""
     pinterest_access_token: str = ""
 
     # Brand

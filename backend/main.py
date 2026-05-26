@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import get_settings
-from api import products, trends, opportunities, reports, connectors, settings as settings_router
+from api import products, trends, opportunities, reports, connectors, settings as settings_router, auth_etsy
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,6 +43,7 @@ app.include_router(opportunities.router, prefix="/api/v1", tags=["opportunities"
 app.include_router(reports.router, prefix="/api/v1", tags=["reports"])
 app.include_router(connectors.router, prefix="/api/v1", tags=["connectors"])
 app.include_router(settings_router.router, prefix="/api/v1", tags=["settings"])
+app.include_router(auth_etsy.router, tags=["auth"])
 
 
 @app.get("/health")

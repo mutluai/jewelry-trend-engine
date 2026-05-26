@@ -32,9 +32,24 @@ class EtsyConnector(BaseConnector):
         super().__init__()
         self.settings = get_settings()
         self.api_key = self.settings.etsy_api_key
+        self.access_token = self.settings.etsy_access_token
         self.is_stub = not bool(self.api_key)
         if self.is_stub:
             logger.warning("Etsy API key not configured — running in STUB mode")
+
+    async def _get_access_token(self) -> str:
+        """Return access token from env or DB settings."""
+        if self.access_token:
+            return self.access_token
+        from database import get_db_context
+        from models import AppSetting
+        from sqlalchemy import select
+        async with get_db_context() as db:
+            result = await db.execute(select(AppSetting).where(AppSetting.key == "etsy_access_token"))
+            setting = result.scalar_one_or_none()
+            if setting and setting.value:
+                return setting.value
+        return ""
 
     async def fetch(self) -> list[RawData]:
         if self.is_stub:
@@ -42,6 +57,10 @@ class EtsyConnector(BaseConnector):
 
         import httpx
         items = []
+        token = await self._get_access_token()
+        headers = {"x-api-key": self.api_key}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             for keyword in JEWELRY_KEYWORDS[:5]:
@@ -54,7 +73,7 @@ class EtsyConnector(BaseConnector):
                             "sort_on": "score",
                             "sort_order": "desc",
                         },
-                        headers={"x-api-key": self.api_key},
+                        headers=headers,
                     )
                     if response.status_code != 200:
                         logger.error(f"Etsy '{keyword}': HTTP {response.status_code} — {response.text[:300]}")
