@@ -26,7 +26,7 @@ class GoogleTrendsConnector(BaseConnector):
     name = "google_trends"
     display_name = "Google Trends"
     legal_status = "public_allowed"
-    rate_limit_seconds = 60.0
+    rate_limit_seconds = 10.0
     enabled = True
 
     async def fetch(self) -> list[RawData]:
@@ -38,7 +38,7 @@ class GoogleTrendsConnector(BaseConnector):
 
         items = []
         # pytrends is synchronous; run in thread pool
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         for geo in GEO_TARGETS:
             try:
