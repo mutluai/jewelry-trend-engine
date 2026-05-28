@@ -17,6 +17,7 @@ CONNECTOR_REGISTRY = {
     "mock_demo": "connectors.mock_demo.MockDemoConnector",
     "google_trends": "connectors.google_trends.GoogleTrendsConnector",
     "etsy": "connectors.etsy.EtsyConnector",
+    "ebay": "connectors.ebay.EbayConnector",
     "pinterest": "connectors.pinterest.PinterestConnector",
     "manual_upload": "connectors.manual_upload.ManualUploadConnector",
     "web_compliant": "connectors.web_compliant.WebCompliantConnector",

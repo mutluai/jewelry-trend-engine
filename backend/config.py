@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     etsy_api_key: str = ""
     etsy_access_token: str = ""
     etsy_refresh_token: str = ""
+    ebay_app_id: str = ""
+    ebay_cert_id: str = ""
     pinterest_access_token: str = ""
 
     # Brand
