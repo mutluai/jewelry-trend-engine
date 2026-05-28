@@ -22,9 +22,10 @@ CONNECTOR_REGISTRY = {
     "pinterest": "connectors.pinterest.PinterestConnector",
     "manual_upload": "connectors.manual_upload.ManualUploadConnector",
     "web_compliant": "connectors.web_compliant.WebCompliantConnector",
+    "tiktok_trends": "connectors.tiktok_trends.TiktokTrendsConnector",
 }
 
-BACKGROUND_CONNECTORS = {"google_trends", "reddit_trends"}
+BACKGROUND_CONNECTORS = {"google_trends", "reddit_trends", "tiktok_trends"}
 
 
 def _load_connector(connector_name: str):

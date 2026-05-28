@@ -20,6 +20,7 @@ CONNECTOR_DEFAULTS = {
     "pinterest":     {"display_name": "Pinterest API v5 (STUB)",  "legal_status": "stub",           "is_enabled": True},
     "manual_upload": {"display_name": "Manual Upload",            "legal_status": "public_allowed", "is_enabled": True},
     "web_compliant": {"display_name": "Compliant Web Scraper",    "legal_status": "public_allowed", "is_enabled": False},
+    "tiktok_trends": {"display_name": "TikTok Trendler",          "legal_status": "public_allowed", "is_enabled": True},
 }
 
 

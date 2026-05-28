@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     ebay_app_id: str = ""
     ebay_cert_id: str = ""
     pinterest_access_token: str = ""
+    rapidapi_key: str = ""
 
     # Brand
     brand_name: str = "Jewelry Brand"
