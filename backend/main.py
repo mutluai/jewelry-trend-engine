@@ -11,11 +11,38 @@ logger = logging.getLogger(__name__)
 app_settings = get_settings()
 
 
+CONNECTOR_DEFAULTS = {
+    "mock_demo":     {"display_name": "Mock / Demo",              "legal_status": "mock",           "is_enabled": True},
+    "google_trends": {"display_name": "Google Trends",            "legal_status": "public_allowed", "is_enabled": True},
+    "etsy":          {"display_name": "Etsy Open API v3",         "legal_status": "official_api",   "is_enabled": True},
+    "ebay":          {"display_name": "eBay Browse API",          "legal_status": "official_api",   "is_enabled": True},
+    "pinterest":     {"display_name": "Pinterest API v5 (STUB)",  "legal_status": "stub",           "is_enabled": True},
+    "manual_upload": {"display_name": "Manual Upload",            "legal_status": "public_allowed", "is_enabled": True},
+    "web_compliant": {"display_name": "Compliant Web Scraper",    "legal_status": "public_allowed", "is_enabled": False},
+}
+
+
+async def _ensure_connector_configs():
+    from database import get_db_context
+    from models import ConnectorConfig
+    from sqlalchemy import select
+    async with get_db_context() as db:
+        for name, defaults in CONNECTOR_DEFAULTS.items():
+            exists = (await db.execute(
+                select(ConnectorConfig).where(ConnectorConfig.name == name)
+            )).scalar_one_or_none()
+            if not exists:
+                db.add(ConnectorConfig(name=name, **defaults))
+                logger.info(f"Created connector config: {name}")
+        await db.commit()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info(f"Starting Jewelry Trend Engine — {app_settings.app_env}")
     logger.info(f"Demo mode: {app_settings.demo_mode}")
     logger.info(f"AI enabled: {app_settings.has_ai}")
+    await _ensure_connector_configs()
     yield
     logger.info("Shutting down Jewelry Trend Engine")
 
