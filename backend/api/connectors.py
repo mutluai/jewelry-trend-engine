@@ -34,7 +34,14 @@ def _load_connector(connector_name: str):
     return getattr(module, class_name)()
 
 
-async def _update_connector_status(connector_name: str, status: str, error: str | None = None):
+async def _update_connector_status(
+    connector_name: str,
+    status: str,
+    error: str | None = None,
+    records_fetched: int | None = None,
+    records_saved: int | None = None,
+    duration_seconds: float | None = None,
+):
     async with get_db_context() as db:
         cfg_result = await db.execute(
             select(ConnectorConfig).where(ConnectorConfig.name == connector_name)
@@ -44,14 +51,30 @@ async def _update_connector_status(connector_name: str, status: str, error: str 
             cfg.last_run_at = datetime.now(timezone.utc).isoformat()
             cfg.last_run_status = status
             cfg.last_error = error
+            if records_fetched is not None or records_saved is not None:
+                existing = cfg.config_json or {}
+                cfg.config_json = {
+                    **existing,
+                    "last_records_fetched": records_fetched,
+                    "last_records_saved": records_saved,
+                    "last_duration_seconds": duration_seconds,
+                }
             await db.commit()
 
 
 async def _run_connector_background(connector_name: str):
+    start = time.time()
     try:
         connector = _load_connector(connector_name)
         result = await connector.run()
-        await _update_connector_status(connector_name, result.status, result.error_message)
+        await _update_connector_status(
+            connector_name,
+            result.status,
+            result.error_message,
+            records_fetched=result.records_fetched,
+            records_saved=result.records_saved,
+            duration_seconds=time.time() - start,
+        )
         logger.info(f"{connector_name}: {result.status}, saved={result.records_saved}")
     except Exception as e:
         logger.error(f"{connector_name} background run failed: {e}", exc_info=True)

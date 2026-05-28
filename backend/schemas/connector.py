@@ -12,6 +12,7 @@ class ConnectorStatusRead(BaseModel):
     last_run_at: str | None
     last_run_status: str | None
     last_error: str | None
+    config_json: dict | None = None
 
     class Config:
         from_attributes = True
