@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 CONNECTOR_REGISTRY = {
     "mock_demo": "connectors.mock_demo.MockDemoConnector",
     "google_trends": "connectors.google_trends.GoogleTrendsConnector",
+    "reddit_trends": "connectors.reddit_trends.RedditTrendsConnector",
     "etsy": "connectors.etsy.EtsyConnector",
     "ebay": "connectors.ebay.EbayConnector",
     "pinterest": "connectors.pinterest.PinterestConnector",
@@ -23,8 +24,7 @@ CONNECTOR_REGISTRY = {
     "web_compliant": "connectors.web_compliant.WebCompliantConnector",
 }
 
-# Connectors that take too long to run synchronously inside a request
-BACKGROUND_CONNECTORS = {"google_trends"}
+BACKGROUND_CONNECTORS = {"google_trends", "reddit_trends"}
 
 
 def _load_connector(connector_name: str):

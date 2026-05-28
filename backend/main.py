@@ -16,6 +16,7 @@ CONNECTOR_DEFAULTS = {
     "google_trends": {"display_name": "Google Trends",            "legal_status": "public_allowed", "is_enabled": True},
     "etsy":          {"display_name": "Etsy Open API v3",         "legal_status": "official_api",   "is_enabled": True},
     "ebay":          {"display_name": "eBay Browse API",          "legal_status": "official_api",   "is_enabled": True},
+    "reddit_trends": {"display_name": "Reddit Sosyal Trendler",   "legal_status": "public_allowed", "is_enabled": True},
     "pinterest":     {"display_name": "Pinterest API v5 (STUB)",  "legal_status": "stub",           "is_enabled": True},
     "manual_upload": {"display_name": "Manual Upload",            "legal_status": "public_allowed", "is_enabled": True},
     "web_compliant": {"display_name": "Compliant Web Scraper",    "legal_status": "public_allowed", "is_enabled": False},
